@@ -14,6 +14,8 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedExamsRouteImport } from './routes/_authenticated/exams'
+import { Route as AuthenticatedSubjectsRouteImport } from './routes/_authenticated/subjects'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const IndexRoute = IndexRouteImport.update({
@@ -40,6 +42,16 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedExamsRoute = AuthenticatedExamsRouteImport.update({
+  id: '/exams',
+  path: '/exams',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSubjectsRoute = AuthenticatedSubjectsRouteImport.update({
+  id: '/subjects',
+  path: '/subjects',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -51,6 +63,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/help': typeof HelpRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/exams': typeof AuthenticatedExamsRoute
+  '/subjects': typeof AuthenticatedSubjectsRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +72,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/help': typeof HelpRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/exams': typeof AuthenticatedExamsRoute
+  '/subjects': typeof AuthenticatedSubjectsRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
@@ -67,13 +83,29 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/help': typeof HelpRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/exams': typeof AuthenticatedExamsRoute
+  '/_authenticated/subjects': typeof AuthenticatedSubjectsRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/help' | '/dashboard' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/help'
+    | '/dashboard'
+    | '/exams'
+    | '/subjects'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/help' | '/dashboard' | '/api/chat'
+  to:
+    | '/'
+    | '/auth'
+    | '/help'
+    | '/dashboard'
+    | '/exams'
+    | '/subjects'
+    | '/api/chat'
   id:
     | '__root__'
     | '/'
@@ -81,6 +113,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/help'
     | '/_authenticated/dashboard'
+    | '/_authenticated/exams'
+    | '/_authenticated/subjects'
     | '/api/chat'
   fileRoutesById: FileRoutesById
 }
@@ -129,6 +163,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/exams': {
+      id: '/_authenticated/exams'
+      path: '/exams'
+      fullPath: '/exams'
+      preLoaderRoute: typeof AuthenticatedExamsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/subjects': {
+      id: '/_authenticated/subjects'
+      path: '/subjects'
+      fullPath: '/subjects'
+      preLoaderRoute: typeof AuthenticatedSubjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -141,10 +189,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedExamsRoute: typeof AuthenticatedExamsRoute
+  AuthenticatedSubjectsRoute: typeof AuthenticatedSubjectsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedExamsRoute: AuthenticatedExamsRoute,
+  AuthenticatedSubjectsRoute: AuthenticatedSubjectsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

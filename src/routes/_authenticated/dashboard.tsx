@@ -22,8 +22,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const hrs = (s: { start_time: string; end_time: string }) => {
-  const [a, b] = [s.start_time, s.end_time].map((t) => { const [h, m] = t.split(":").map(Number); return h + m / 60; });
-  return Math.max(0, b - a);
+  const [a, b] = [s.start_time, s.end_time].map((t) => { const [h, m] = t.split(":").map(Number); return (h ?? 0) + (m ?? 0) / 60; });
+  return Math.max(0, (b ?? 0) - (a ?? 0));
 };
 
 function Dashboard() {
@@ -64,7 +64,7 @@ function Dashboard() {
 
   const mark = async (id: string, status: "done" | "missed") => {
     const { error } = await supabase.from("study_sessions").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     invalidate("sessions");
   };
 

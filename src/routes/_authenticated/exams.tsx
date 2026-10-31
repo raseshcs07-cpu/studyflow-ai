@@ -43,10 +43,10 @@ function ExamsPage() {
 
   const save = async () => {
     const p = schema.safeParse({ ...form, target_marks: form.target_marks ? Number(form.target_marks) : null });
-    if (!p.success) return toast.error(p.error.issues[0].message);
-    if (p.data.exam_date < todayStr()) return toast.error("Exam date can't be in the past");
+    if (!p.success) { toast.error(p.error.issues[0]?.message); return; }
+    if (p.data.exam_date < todayStr()) { toast.error("Exam date can't be in the past"); return; }
     const { error } = await supabase.from("exams").insert({ ...p.data, user_id: await currentUserId() });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Exam added");
     setOpen(false);
     setForm({ subject_id: "", type: "mid", exam_date: "", syllabus_topics: "", target_marks: "" });
@@ -54,7 +54,7 @@ function ExamsPage() {
   };
   const remove = async (id: string) => {
     const { error } = await supabase.from("exams").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     invalidate("exams");
   };
 

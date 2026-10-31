@@ -36,7 +36,7 @@ const subjectSchema = z.object({
   basics_level: z.enum(["beginner", "intermediate", "strong"]),
 });
 type SubjectForm = z.infer<typeof subjectSchema>;
-const blank: SubjectForm = { name: "", color: SUBJECT_COLORS[0], difficulty: 3, priority: 3, basics_level: "beginner" };
+const blank: SubjectForm = { name: "", color: SUBJECT_COLORS[0] ?? "#10a37f", difficulty: 3, priority: 3, basics_level: "beginner" };
 
 function SubjectsPage() {
   const invalidate = useInvalidate();
@@ -48,11 +48,11 @@ function SubjectsPage() {
   const save = async () => {
     if (!editing) return;
     const p = subjectSchema.safeParse(editing.form);
-    if (!p.success) return toast.error(p.error.issues[0].message);
+    if (!p.success) { toast.error(p.error.issues[0]?.message); return; }
     const r = editing.id
       ? await supabase.from("subjects").update(p.data).eq("id", editing.id)
       : await supabase.from("subjects").insert({ ...p.data, user_id: await currentUserId() });
-    if (r.error) return toast.error(r.error.message);
+    if (r.error) { toast.error(r.error.message); return; }
     toast.success(editing.id ? "Subject updated" : "Subject added");
     setEditing(null);
     invalidate("subjects");
@@ -60,14 +60,14 @@ function SubjectsPage() {
   const remove = async (s: Subject) => {
     if (!confirm(`Delete ${s.name}? Its topics, exams and sessions will be removed.`)) return;
     const { error } = await supabase.from("subjects").delete().eq("id", s.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Subject deleted");
     invalidate("subjects", "topics", "exams", "sessions");
   };
   const runExplain = async (subject: string, topic?: string) => {
     setExplain({ title: topic ?? subject, loading: true });
     try {
-      const data = await explainBasics({ data: { subject, topic } });
+      const data = await explainBasics({ data: topic ? { subject, topic } : { subject } });
       setExplain({ title: topic ?? subject, loading: false, data });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Couldn't explain right now");
@@ -147,20 +147,20 @@ function SubjectCard({ subject: s, topics, onEdit, onDelete, onExplain }: { subj
 
   const addTopic = async () => {
     const p = z.object({ title: z.string().trim().min(1, "Topic title is required").max(160), hours: z.number().positive().max(100) }).safeParse({ title, hours: Number(hours) });
-    if (!p.success) return toast.error(p.error.issues[0].message);
+    if (!p.success) { toast.error(p.error.issues[0]?.message); return; }
     const { error } = await supabase.from("topics").insert({ subject_id: s.id, user_id: s.user_id, title: p.data.title, is_basic: isBasic, estimated_hours: p.data.hours });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setTitle("");
     invalidate("topics");
   };
   const toggle = async (id: string, checked: boolean) => {
     const { error } = await supabase.from("topics").update({ status: checked ? "done" : "not_started" }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     invalidate("topics");
   };
   const del = async (id: string) => {
     const { error } = await supabase.from("topics").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     invalidate("topics");
   };
 

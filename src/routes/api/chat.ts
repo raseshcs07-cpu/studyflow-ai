@@ -13,8 +13,8 @@ const BASE_PROMPT = `You are StudyPilot Buddy, a friendly AI helper inside the S
 async function userContext(request: Request): Promise<string> {
   const auth = request.headers.get("authorization");
   if (!auth?.startsWith("Bearer ")) return "The user is not signed in.";
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  const supabase = createClient<Database>(process.env.SUPABASE_URL!, key, {
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  const supabase = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
     auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
     global: {
       headers: { Authorization: auth },

@@ -38,14 +38,14 @@ function AuthPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const p = schema.safeParse({ email, password });
-    if (!p.success) return toast.error(p.error.issues[0].message);
+    if (!p.success) { toast.error(p.error.issues[0]?.message); return; }
     setBusy(true);
     const { error } =
       mode === "in"
         ? await supabase.auth.signInWithPassword(p.data)
         : await supabase.auth.signUp({ ...p.data, options: { emailRedirectTo: window.location.origin + "/dashboard" } });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (mode === "up") toast.success("Check your email to confirm your account.");
   };
 

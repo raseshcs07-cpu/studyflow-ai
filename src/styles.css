@@ -123,3 +123,14 @@
 @utility font-display { font-family: var(--font-display); }
 @utility bg-hero { background-image: var(--gradient-hero); }
 @utility shadow-soft { box-shadow: var(--shadow-soft); }
+
+@layer components {
+  .prose-chat p { margin: 0 0 0.6em; }
+  .prose-chat ul, .prose-chat ol { margin: 0 0 0.6em; padding-left: 1.2em; }
+  .prose-chat ul { list-style: disc; }
+  .prose-chat ol { list-style: decimal; }
+  .prose-chat li { margin: 0.15em 0; }
+  .prose-chat strong { font-weight: 600; }
+  .prose-chat h1, .prose-chat h2, .prose-chat h3 { font-weight: 600; margin: 0.6em 0 0.3em; }
+  .prose-chat code { background: var(--muted); padding: 0.1em 0.35em; border-radius: 0.3em; font-size: 0.9em; }
+}

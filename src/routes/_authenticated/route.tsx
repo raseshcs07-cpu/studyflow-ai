@@ -1,11 +1,10 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, BookOpen, GraduationCap, CalendarDays, Sparkles as _unused, Bot, Settings, HelpCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, BookOpen, GraduationCap, CalendarDays, Bot, Settings, HelpCircle, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Credits } from "@/components/credits";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 
-void _unused;
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
